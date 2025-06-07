@@ -2,17 +2,18 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Music Player</title>
+  <title>Flex Music Player</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <div class="container">
-    <button class="join-btn">Join Music Player</button>
-    <div class="player-card">
+  <div class="container fade-in">
+    <button class="join-btn">🎧 Join Music Player</button>
+
+    <div class="player-card bounce">
       <img id="thumb" class="album-img" src="" alt="Thumbnail">
       <div class="song-title" id="title">Loading...</div>
-      <div class="artist" id="artist">Unknown</div>
+      <div class="artist" id="artist">Unknown Artist</div>
 
       <div class="timebar">
         <span id="current">0:00</span>
@@ -21,18 +22,18 @@
       </div>
 
       <div class="controls">
-        <button onclick="backward()">⏪</button>
         <button onclick="rewind()">⏮️</button>
-        <button onclick="togglePlay()">⏯️</button>
+        <button onclick="togglePlay()">▶️</button>
         <button onclick="forward()">⏭️</button>
       </div>
 
       <div class="actions">
+        <button id="favBtn" onclick="toggleFav()">🤍</button>
         <button onclick="stopAudio()">Stop</button>
         <button onclick="endPlayer()">End</button>
       </div>
 
-      <audio id="audio" preload="auto" autoplay hidden></audio>
+      <audio id="audio" preload="auto" autoplay></audio>
     </div>
   </div>
 
