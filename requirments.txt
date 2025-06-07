@@ -76,4 +76,4 @@ pillow
 lottie[cli]
 imageio
 opencv-python-headless
-numpy
+numpy 
