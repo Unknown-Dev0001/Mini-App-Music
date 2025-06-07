@@ -1,0 +1,40 @@
+body {
+  font-family: sans-serif;
+  background: #111;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.container {
+  background: #1f1f1f;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+}
+.album-img {
+  width: 150px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+.song-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+.timebar, .controls, .actions {
+  margin-top: 10px;
+}
+input[type=range] {
+  width: 100%;
+}
+button {
+  margin: 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #333;
+  color: #fff;
+}
