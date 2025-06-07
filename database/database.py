@@ -1,5 +1,4 @@
-from motor.motor_asyncio import AsyncIOMotorClient
-from config import MONGO_URL
+
 import logging
 from motor.motor_asyncio import AsyncIOMotorClient
 import config
