@@ -1,4 +1,5 @@
 from pyrogram import filters
+from pyrogram.enums import ParseMode
 from pyrogram.types import Message, InlineKeyboardMarkup, InlineKeyboardButton, WebAppInfo
 from urllib.parse import quote_plus
 
@@ -24,15 +25,26 @@ async def play_command(client, message: Message):
     status_msg = await message.reply("🔍 Searching for the song...")
 
     try:
+        # Get song info
         title, duration, duration_sec, thumb, vidid = await yt_api.details(song_query)
+
+        # Get audio streamable URL
         success, audio_url = await yt_api.video_url(f"https://www.youtube.com/watch?v={vidid}")
         if not success:
             raise Exception(f"Failed to get audio URL.\n\n{audio_url}")
-    except Exception as e:
-        return await status_msg.edit(f"❌ Failed to fetch song.\n\nError: `{e}`")
 
+    except Exception as e:
+        error_text = f"❌ Failed to fetch song.\n\nError: <code>{str(e)}</code>"
+        try:
+            return await status_msg.edit_text(error_text, parse_mode=ParseMode.HTML)
+        except:
+            await status_msg.delete()
+            return await message.reply(error_text, parse_mode=ParseMode.HTML, quote=True)
+
+    # Save play info
     await save_song_play(user.id, user.first_name, title, duration or "Unknown")
 
+    # Log to group
     try:
         await client.send_message(
             chat_id=LOG_GROUP_ID,
@@ -43,16 +55,19 @@ async def play_command(client, message: Message):
                 f"⏱️ <b>Duration:</b> {duration or 'Unknown'}\n"
                 f"💬 <b>Chat ID:</b> <code>{message.chat.id}</code>"
             ),
+            parse_mode=ParseMode.HTML
         )
     except Exception as log_error:
-        print(f"Log error: {log_error}")
+        print(f"[LOG ERROR]: {log_error}")
 
+    # Build WebApp URL
     audio_url_encoded = quote_plus(audio_url)
     title_encoded = quote_plus(title)
     thumb_encoded = quote_plus(thumb or YT_THUMBNAIL)
 
     webapp_url = f"{MINI_APP_URL}?audio={audio_url_encoded}&title={title_encoded}&thumb={thumb_encoded}"
 
+    # Final music player response
     await status_msg.delete()
     await message.reply_photo(
         photo=thumb or YT_THUMBNAIL,
@@ -66,5 +81,6 @@ async def play_command(client, message: Message):
                 text="🎧 Play in WebApp",
                 web_app=WebAppInfo(url=webapp_url)
             )
-        ]])
+        ]]),
+        parse_mode=ParseMode.HTML
     )
